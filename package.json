@@ -14,8 +14,9 @@
         "webpack-merge": "^5.8.0"
     },
     "dependencies": {
-        "three": "^0.137.4",
         "lil-gui": "^0.16.0",
-        "stats-js": "^1.0.1"
+        "martinez-polygon-clipping": "^0.7.1",
+        "stats-js": "^1.0.1",
+        "three": "^0.137.4"
     }
 }

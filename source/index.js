@@ -4,9 +4,9 @@ import "/style/index.css";
 
 import * as three from "three";
 
-import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
-
 import { triangulate } from "./library/earcut";
+
+import * as martinez from "martinez-polygon-clipping";
 
 /* ------------------------------------------------------------------------------------------------------ */
 /* Renderer */
@@ -22,21 +22,15 @@ const scene = new three.Scene();
 
 /* Camera */
 const camera = new three.OrthographicCamera(
-    - 50,
-    + 50,
-    + 50 * window.innerHeight / window.innerWidth,
-    - 50 * window.innerHeight / window.innerWidth,
+    - 100,
+    + 100,
+    + 100 * window.innerHeight / window.innerWidth,
+    - 100 * window.innerHeight / window.innerWidth,
     0.01,
     10000
 );
 
 scene.add( camera );
-
-/* Controls */
-// const controls = new OrbitControls( camera, renderer.domElement );
-
-// controls.enableDamping = true;
-// controls.target = new three.Vector3( 0, 0, 0.01 );
 
 /* Resize */
 window.addEventListener( "resize", _ => {
@@ -44,7 +38,10 @@ window.addEventListener( "resize", _ => {
     renderer.setPixelRatio( window.devicePixelRatio );
     renderer.setSize( window.innerWidth, window.innerHeight );
 
-    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.left   = - 100;
+    camera.right  = + 100;
+    camera.top    = + 100 * window.innerHeight / window.innerWidth;
+    camera.bottom = - 100 * window.innerHeight / window.innerWidth;
     camera.updateProjectionMatrix();
 
 } );
@@ -63,29 +60,40 @@ async function main() {
     const p_2_dirty_data = await fetch( p_2_url );
     const p_3_dirty_data = await fetch( p_3_url );
 
-    const p_1_clean_data = await cleanData( p_1_dirty_data );
-    const p_2_clean_data = await cleanData( p_2_dirty_data );
-    const p_3_clean_data = await cleanData( p_3_dirty_data );
+    const p_1_clean_data = await p_1_dirty_data.json();
+    const p_2_clean_data = await p_2_dirty_data.json();
+    const p_3_clean_data = await p_3_dirty_data.json();
 
-    const p_1 = createPolygon( p_1_clean_data );
-    const p_2 = createPolygon( p_2_clean_data );
-    const p_3 = createPolygon( p_3_clean_data );
+    const test = martinez.union(
+        p_1_clean_data.features[ 0 ].geometry.coordinates,
+        p_2_clean_data.features[ 0 ].geometry.coordinates,
+    );
 
-    scene.add( p_1, p_2, p_3 );
+    console.log( test );
 
-    async function cleanData( dirty_data ) {
+    // const p_1_clean_data = await cleanData( p_1_dirty_data );
+    // const p_2_clean_data = await cleanData( p_2_dirty_data );
+    // const p_3_clean_data = await cleanData( p_3_dirty_data );
 
-        const a = await dirty_data.json();
+    // const p_1 = createPolygon( p_1_clean_data );
+    // const p_2 = createPolygon( p_2_clean_data );
+    // const p_3 = createPolygon( p_3_clean_data );
 
-        const b = a.features[ 0 ].geometry.coordinates[ 0 ];
+    // scene.add( p_1, p_2, p_3 );
 
-        const c = [];
+    // async function cleanData( dirty_data ) {
 
-        b.forEach( item => c.push( ...item, 0 ) );
+    //     const a = await dirty_data.json();
 
-        return c;
+    //     const b = a.features[ 0 ].geometry.coordinates[ 0 ];
 
-    }
+    //     const c = [];
+
+    //     b.forEach( item => c.push( ...item, 0 ) );
+
+    //     return c;
+
+    // }
 
 }
 
@@ -123,13 +131,11 @@ function createPolygon( position ) {
 }
 
 /* 移动相机 */
-camera.position.z = 5;
+camera.position.z = 1;
 
 /* ------------------------------------------------------------------------------------------------------ */
 /* Render */
 renderer.setAnimationLoop( function loop() {
-
-    // controls.update();
 
     renderer.render( scene, camera );
 
