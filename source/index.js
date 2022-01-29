@@ -22,10 +22,10 @@ const scene = new three.Scene();
 
 /* Camera */
 const camera = new three.OrthographicCamera(
-    - 100,
-    + 100,
-    + 100 * window.innerHeight / window.innerWidth,
-    - 100 * window.innerHeight / window.innerWidth,
+    - 50,
+    + 50,
+    + 50 * window.innerHeight / window.innerWidth,
+    - 50 * window.innerHeight / window.innerWidth,
     0.01,
     10000
 );
