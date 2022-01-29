@@ -60,40 +60,44 @@ async function main() {
     const p_2_dirty_data = await fetch( p_2_url );
     const p_3_dirty_data = await fetch( p_3_url );
 
-    const p_1_clean_data = await p_1_dirty_data.json();
-    const p_2_clean_data = await p_2_dirty_data.json();
-    const p_3_clean_data = await p_3_dirty_data.json();
+    const p_1_clean_data = await clean( p_1_dirty_data );
+    const p_2_clean_data = await clean( p_2_dirty_data );
+    const p_3_clean_data = await clean( p_3_dirty_data );
 
-    const test = martinez.union(
-        p_1_clean_data.features[ 0 ].geometry.coordinates,
-        p_2_clean_data.features[ 0 ].geometry.coordinates,
-    );
+    const union_1_and_2 = merge( p_1_clean_data, p_2_clean_data );
+    const union_1_and_2_and_3 = merge( union_1_and_2, p_3_clean_data );
 
-    console.log( test );
+    const union_position = [];
 
-    // const p_1_clean_data = await cleanData( p_1_dirty_data );
-    // const p_2_clean_data = await cleanData( p_2_dirty_data );
-    // const p_3_clean_data = await cleanData( p_3_dirty_data );
+    union_1_and_2_and_3[ 0 ].forEach( item => {
 
-    // const p_1 = createPolygon( p_1_clean_data );
-    // const p_2 = createPolygon( p_2_clean_data );
-    // const p_3 = createPolygon( p_3_clean_data );
+        union_position.push( ...item, 0 );
 
-    // scene.add( p_1, p_2, p_3 );
+    } );
 
-    // async function cleanData( dirty_data ) {
+    const union_polygon = createPolygon( union_position );
 
-    //     const a = await dirty_data.json();
+    scene.add( union_polygon );
 
-    //     const b = a.features[ 0 ].geometry.coordinates[ 0 ];
+    async function clean( dirty_data ) {
 
-    //     const c = [];
+        const json_data  = await dirty_data.json();
 
-    //     b.forEach( item => c.push( ...item, 0 ) );
+        const coordinates_data = json_data.features[ 0 ].geometry.coordinates;
 
-    //     return c;
+        return coordinates_data;
 
-    // }
+    }
+
+    function merge( data_1, data_2 ) {
+
+        const dirty_union = martinez.union( data_1, data_2 );
+
+        const clean_union = dirty_union[ 0 ];
+
+        return clean_union;
+
+    }
 
 }
 
