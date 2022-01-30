@@ -52,9 +52,9 @@ main();
 
 async function main() {
 
-    const p_1_url = "/static/p-1.json";
-    const p_2_url = "/static/p-2.json";
-    const p_3_url = "/static/p-3.json";
+    const p_1_url = "/static/fake/p-1.json";
+    const p_2_url = "/static/fake/p-2.json";
+    const p_3_url = "/static/fake/p-3.json";
 
     const p_1_dirty_data = await fetch( p_1_url );
     const p_2_dirty_data = await fetch( p_2_url );

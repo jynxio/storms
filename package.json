@@ -17,6 +17,6 @@
         "lil-gui": "^0.16.0",
         "martinez-polygon-clipping": "^0.7.1",
         "stats-js": "^1.0.1",
-        "three": "^0.137.4"
+        "three": "^0.137.5"
     }
 }
