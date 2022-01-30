@@ -1,0 +1,342 @@
+{
+    "data": {
+        "message": "Success",
+        "storm": {
+            "type": "FeatureCollection",
+            "crs": {
+                "type": "name",
+                "properties": {
+                    "name": "EPSG:4326"
+                }
+            },
+            "features": [
+                {
+                    "type": "Feature",
+                    "geometry": {
+                        "type": "Point",
+                        "coordinates": [
+                            -77.6,
+                            29.6
+                        ]
+                    },
+                    "properties": {
+                        "stormID": "2020138N28281",
+                        "segmentID": 362092,
+                        "windSpeed": 35,
+                        "minPressure": "1004.0",
+                        "category": "TS",
+                        "date": "05/17/2020 06"
+                    }
+                },
+                {
+                    "type": "Feature",
+                    "geometry": {
+                        "type": "Point",
+                        "coordinates": [
+                            -76.7,
+                            33.1
+                        ]
+                    },
+                    "properties": {
+                        "stormID": "2020138N28281",
+                        "segmentID": 362096,
+                        "windSpeed": 40,
+                        "minPressure": "1002.0",
+                        "category": "TS",
+                        "date": "05/18/2020 06"
+                    }
+                },
+                {
+                    "type": "Feature",
+                    "geometry": {
+                        "type": "Point",
+                        "coordinates": [
+                            -73.1,
+                            36.2
+                        ]
+                    },
+                    "properties": {
+                        "stormID": "2020138N28281",
+                        "segmentID": 362099,
+                        "windSpeed": 50,
+                        "minPressure": "991.0",
+                        "category": "TS",
+                        "date": "05/19/2020 00"
+                    }
+                },
+                {
+                    "type": "Feature",
+                    "geometry": {
+                        "type": "Point",
+                        "coordinates": [
+                            -78.7,
+                            28
+                        ]
+                    },
+                    "properties": {
+                        "stormID": "2020138N28281",
+                        "segmentID": 362090,
+                        "windSpeed": 30,
+                        "minPressure": "1008.0",
+                        "category": "TD",
+                        "date": "05/16/2020 18"
+                    }
+                },
+                {
+                    "type": "Feature",
+                    "geometry": {
+                        "type": "Point",
+                        "coordinates": [
+                            -77,
+                            31.9
+                        ]
+                    },
+                    "properties": {
+                        "stormID": "2020138N28281",
+                        "segmentID": 362095,
+                        "windSpeed": 40,
+                        "minPressure": "1003.0",
+                        "category": "TS",
+                        "date": "05/18/2020 00"
+                    }
+                },
+                {
+                    "type": "Feature",
+                    "geometry": {
+                        "type": "Point",
+                        "coordinates": [
+                            -69.5,
+                            37
+                        ]
+                    },
+                    "properties": {
+                        "stormID": "2020138N28281",
+                        "segmentID": 362101,
+                        "windSpeed": 55,
+                        "minPressure": "989.0",
+                        "category": "ET",
+                        "date": "05/19/2020 12"
+                    }
+                },
+                {
+                    "type": "Feature",
+                    "geometry": {
+                        "type": "Point",
+                        "coordinates": [
+                            -77.3,
+                            31
+                        ]
+                    },
+                    "properties": {
+                        "stormID": "2020138N28281",
+                        "segmentID": 362094,
+                        "windSpeed": 40,
+                        "minPressure": "1003.0",
+                        "category": "TS",
+                        "date": "05/17/2020 18"
+                    }
+                },
+                {
+                    "type": "Feature",
+                    "geometry": {
+                        "type": "Point",
+                        "coordinates": [
+                            -66.8,
+                            36.2
+                        ]
+                    },
+                    "properties": {
+                        "stormID": "2020138N28281",
+                        "segmentID": 362103,
+                        "windSpeed": 50,
+                        "minPressure": "993.0",
+                        "category": "ET",
+                        "date": "05/20/2020 00"
+                    }
+                },
+                {
+                    "type": "Feature",
+                    "geometry": {
+                        "type": "Point",
+                        "coordinates": [
+                            -65,
+                            32.8
+                        ]
+                    },
+                    "properties": {
+                        "stormID": "2020138N28281",
+                        "segmentID": 362107,
+                        "windSpeed": 40,
+                        "minPressure": "1008.0",
+                        "category": "ET",
+                        "date": "05/21/2020 00"
+                    }
+                },
+                {
+                    "type": "Feature",
+                    "geometry": {
+                        "type": "Point",
+                        "coordinates": [
+                            -71.4,
+                            36.8
+                        ]
+                    },
+                    "properties": {
+                        "stormID": "2020138N28281",
+                        "segmentID": 362100,
+                        "windSpeed": 50,
+                        "minPressure": "990.0",
+                        "category": "TS",
+                        "date": "05/19/2020 06"
+                    }
+                },
+                {
+                    "type": "Feature",
+                    "geometry": {
+                        "type": "Point",
+                        "coordinates": [
+                            -65.6,
+                            34.6
+                        ]
+                    },
+                    "properties": {
+                        "stormID": "2020138N28281",
+                        "segmentID": 362105,
+                        "windSpeed": 50,
+                        "minPressure": "1002.0",
+                        "category": "ET",
+                        "date": "05/20/2020 12"
+                    }
+                },
+                {
+                    "type": "Feature",
+                    "geometry": {
+                        "type": "Point",
+                        "coordinates": [
+                            -74.7,
+                            35.5
+                        ]
+                    },
+                    "properties": {
+                        "stormID": "2020138N28281",
+                        "segmentID": 362098,
+                        "windSpeed": 45,
+                        "minPressure": "993.0",
+                        "category": "TS",
+                        "date": "05/18/2020 18"
+                    }
+                },
+                {
+                    "type": "Feature",
+                    "geometry": {
+                        "type": "Point",
+                        "coordinates": [
+                            -65.3,
+                            33.7
+                        ]
+                    },
+                    "properties": {
+                        "stormID": "2020138N28281",
+                        "segmentID": 362106,
+                        "windSpeed": 45,
+                        "minPressure": "1006.0",
+                        "category": "ET",
+                        "date": "05/20/2020 18"
+                    }
+                },
+                {
+                    "type": "Feature",
+                    "geometry": {
+                        "type": "Point",
+                        "coordinates": [
+                            -78,
+                            28.9
+                        ]
+                    },
+                    "properties": {
+                        "stormID": "2020138N28281",
+                        "segmentID": 362091,
+                        "windSpeed": 35,
+                        "minPressure": "1006.0",
+                        "category": "TS",
+                        "date": "05/17/2020 00"
+                    }
+                },
+                {
+                    "type": "Feature",
+                    "geometry": {
+                        "type": "Point",
+                        "coordinates": [
+                            -77.5,
+                            30.3
+                        ]
+                    },
+                    "properties": {
+                        "stormID": "2020138N28281",
+                        "segmentID": 362093,
+                        "windSpeed": 35,
+                        "minPressure": "1003.0",
+                        "category": "TS",
+                        "date": "05/17/2020 12"
+                    }
+                },
+                {
+                    "type": "Feature",
+                    "geometry": {
+                        "type": "Point",
+                        "coordinates": [
+                            -66,
+                            35.5
+                        ]
+                    },
+                    "properties": {
+                        "stormID": "2020138N28281",
+                        "segmentID": 362104,
+                        "windSpeed": 50,
+                        "minPressure": "997.0",
+                        "category": "ET",
+                        "date": "05/20/2020 06"
+                    }
+                },
+                {
+                    "type": "Feature",
+                    "geometry": {
+                        "type": "Point",
+                        "coordinates": [
+                            -67.8,
+                            36.9
+                        ]
+                    },
+                    "properties": {
+                        "stormID": "2020138N28281",
+                        "segmentID": 362102,
+                        "windSpeed": 50,
+                        "minPressure": "991.0",
+                        "category": "ET",
+                        "date": "05/19/2020 18"
+                    }
+                },
+                {
+                    "type": "Feature",
+                    "geometry": {
+                        "type": "Point",
+                        "coordinates": [
+                            -75.9,
+                            34.4
+                        ]
+                    },
+                    "properties": {
+                        "stormID": "2020138N28281",
+                        "segmentID": 362097,
+                        "windSpeed": 45,
+                        "minPressure": "1000.0",
+                        "category": "TS",
+                        "date": "05/18/2020 12"
+                    }
+                }
+            ]
+        },
+        "queryTime": 4,
+        "totalTime": 4
+    }
+}

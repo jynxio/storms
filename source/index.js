@@ -8,6 +8,12 @@ import { triangulate } from "./library/earcut";
 
 import * as martinez from "martinez-polygon-clipping";
 
+// import data from "./data";
+
+/* ------------------------------------------------------------------------------------------------------ */
+/* Test */
+// data();
+
 /* ------------------------------------------------------------------------------------------------------ */
 /* Renderer */
 const renderer = new three.WebGLRenderer( { antialias: window.devicePixelRatio < 2 } );
