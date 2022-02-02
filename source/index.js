@@ -4,8 +4,6 @@ import "/style/index.css";
 
 import * as three from "three";
 
-import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
-
 import { triangulate } from "./library/earcut";
 
 import * as martinez from "martinez-polygon-clipping";
@@ -16,51 +14,46 @@ import * as convertCoordinate from "./library/convertCoordinate";
 /* Renderer */
 const renderer = new three.WebGLRenderer({ antialias: window.devicePixelRatio < 2 });
 
-renderer.setPixelRatio(window.devicePixelRatio);
-renderer.setSize(window.innerWidth, window.innerHeight);
+renderer.setPixelRatio( Math.min( window.devicePixelRatio ) );
+renderer.setSize( window.innerWidth, window.innerHeight );
 
-document.body.append(renderer.domElement);
+document.body.append( renderer.domElement );
 
 /* Scene */
 const scene = new three.Scene();
 
 /* Camera */
 const camera = new three.OrthographicCamera(
-    - 60, // left
-    + 60, // right
-    + 60 * window.innerHeight / window.innerWidth, // top
-    - 60 * window.innerHeight / window.innerWidth, // bottom
-    0.1 , // near
-    1000, // far
+    - 60,
+    + 60,
+    + 60 * window.innerHeight / window.innerWidth,
+    - 60 * window.innerHeight / window.innerWidth,
+    0.1 ,
+    100,
 );
 
-scene.add(camera);
-
-/* Controls */
-const controls = new OrbitControls(camera, renderer.domElement);
-
-controls.enableDamping = true;
-controls.target = new three.Vector3(0, 0, 0.01);
+scene.add( camera );
 
 /* Resize */
-window.addEventListener("resize", _ => {
+window.addEventListener( "resize", _ => {
 
-    renderer.setPixelRatio(window.devicePixelRatio);
-    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setPixelRatio( Math.min( window.devicePixelRatio ) );
+    renderer.setSize( window.innerWidth, window.innerHeight );
 
-    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.left   = - 60;
+    camera.right  = + 60;
+    camera.top    = + 60 * window.innerHeight / window.innerWidth;
+    camera.bottom = - 60 * window.innerHeight / window.innerWidth;
     camera.updateProjectionMatrix();
 
-});
+} );
 
 /* Render */
-renderer.setAnimationLoop(function loop() {
+renderer.setAnimationLoop( function loop() {
 
-    controls.update();
+    renderer.render( scene, camera );
 
-    renderer.render(scene, camera);
-
-});
+} );
 
 /* ------------------------------------------------------------------------------------------------------ */
 /* 移动相机 */
