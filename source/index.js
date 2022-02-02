@@ -4,149 +4,167 @@ import "/style/index.css";
 
 import * as three from "three";
 
+import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
+
 import { triangulate } from "./library/earcut";
 
 import * as martinez from "martinez-polygon-clipping";
 
-// import data from "./data";
-
-/* ------------------------------------------------------------------------------------------------------ */
-/* Test */
-// data();
+import * as convertCoordinate from "./library/convertCoordinate";
 
 /* ------------------------------------------------------------------------------------------------------ */
 /* Renderer */
-const renderer = new three.WebGLRenderer( { antialias: window.devicePixelRatio < 2 } );
+const renderer = new three.WebGLRenderer({ antialias: window.devicePixelRatio < 2 });
 
-renderer.setPixelRatio( window.devicePixelRatio );
-renderer.setSize( window.innerWidth, window.innerHeight );
+renderer.setPixelRatio(window.devicePixelRatio);
+renderer.setSize(window.innerWidth, window.innerHeight);
 
-document.body.append( renderer.domElement );
+document.body.append(renderer.domElement);
 
 /* Scene */
 const scene = new three.Scene();
 
 /* Camera */
 const camera = new three.OrthographicCamera(
-    - 50,
-    + 50,
-    + 50 * window.innerHeight / window.innerWidth,
-    - 50 * window.innerHeight / window.innerWidth,
-    0.01,
-    10000
+    - 60, // left
+    + 60, // right
+    + 60 * window.innerHeight / window.innerWidth, // top
+    - 60 * window.innerHeight / window.innerWidth, // bottom
+    0.1 , // near
+    1000, // far
 );
 
-scene.add( camera );
+scene.add(camera);
+
+/* Controls */
+const controls = new OrbitControls(camera, renderer.domElement);
+
+controls.enableDamping = true;
+controls.target = new three.Vector3(0, 0, 0.01);
 
 /* Resize */
-window.addEventListener( "resize", _ => {
+window.addEventListener("resize", _ => {
 
-    renderer.setPixelRatio( window.devicePixelRatio );
-    renderer.setSize( window.innerWidth, window.innerHeight );
+    renderer.setPixelRatio(window.devicePixelRatio);
+    renderer.setSize(window.innerWidth, window.innerHeight);
 
-    camera.left   = - 100;
-    camera.right  = + 100;
-    camera.top    = + 100 * window.innerHeight / window.innerWidth;
-    camera.bottom = - 100 * window.innerHeight / window.innerWidth;
+    camera.aspect = window.innerWidth / window.innerHeight;
     camera.updateProjectionMatrix();
 
-} );
+});
 
-/* ------------------------------------------------------------------------------------------------------ */
-/* GeoJSON */
-main();
-
-async function main() {
-
-    const p_1_url = "/static/fake/p-1.json";
-    const p_2_url = "/static/fake/p-2.json";
-    const p_3_url = "/static/fake/p-3.json";
-
-    const p_1_dirty_data = await fetch( p_1_url );
-    const p_2_dirty_data = await fetch( p_2_url );
-    const p_3_dirty_data = await fetch( p_3_url );
-
-    const p_1_clean_data = await clean( p_1_dirty_data );
-    const p_2_clean_data = await clean( p_2_dirty_data );
-    const p_3_clean_data = await clean( p_3_dirty_data );
-
-    const union_1_and_2 = merge( p_1_clean_data, p_2_clean_data );
-    const union_1_and_2_and_3 = merge( union_1_and_2, p_3_clean_data );
-
-    const union_position = [];
-
-    union_1_and_2_and_3[ 0 ].forEach( item => {
-
-        union_position.push( ...item, 0 );
-
-    } );
-
-    const union_polygon = createPolygon( union_position );
-
-    scene.add( union_polygon );
-
-    async function clean( dirty_data ) {
-
-        const json_data  = await dirty_data.json();
-
-        const coordinates_data = json_data.features[ 0 ].geometry.coordinates;
-
-        return coordinates_data;
-
-    }
-
-    function merge( data_1, data_2 ) {
-
-        const dirty_union = martinez.union( data_1, data_2 );
-
-        const clean_union = dirty_union[ 0 ];
-
-        return clean_union;
-
-    }
-
-}
-
-function createPolygon( position ) {
-
-    /* 创建Mesh实例 */
-    const g = new three.BufferGeometry();
-    const m = new three.MeshBasicMaterial( {
-        side: three.DoubleSide,
-        color: Math.round( Math.random() * 0xffffff ),
-        transparent: true,
-        opacity: 0.5,
-    } );
-    const p = new three.Mesh( g, m );
-
-    /* 设置position属性 */
-    const position_array = new Float32Array( position );
-    const position_attribute = new three.BufferAttribute( position_array, 3 );
-
-    g.setAttribute( "position", position_attribute );
-
-    /* 设置index属性 */
-    const index_array = new Uint16Array( triangulate( position_array, 3 ) );
-    const index_attribute = new three.BufferAttribute( index_array, 1 );
-
-    g.setIndex( index_attribute );
-    g.index.needsUpdate = true;
-
-    /* 更新包围盒属性 */
-    g.computeBoundingSphere();
-    g.computeBoundingBox()
-
-    return p;
-
-}
-
-/* 移动相机 */
-camera.position.z = 1;
-
-/* ------------------------------------------------------------------------------------------------------ */
 /* Render */
-renderer.setAnimationLoop( function loop() {
+renderer.setAnimationLoop(function loop() {
 
-    renderer.render( scene, camera );
+    controls.update();
 
-} );
+    renderer.render(scene, camera);
+
+});
+
+/* ------------------------------------------------------------------------------------------------------ */
+/* 移动相机 */
+camera.position.set( 0, 0, 5 );
+
+/* 处理数据 */
+async function fecthData( url ) {
+
+    let data;
+
+    data = await fetch( url );
+    data = await data.json();
+    data = data.features[ 0 ].geometry.coordinates; // 三维数组
+
+    return data;
+
+}
+
+/* 创建多边形 */
+function createPolygon( position, color ) {
+
+    /* 创建多边形 */
+    const geometry = new three.BufferGeometry();
+    const material = new three.MeshBasicMaterial( { side: three.DoubleSide, color: color, wireframe: true } );
+    const polygon = new three.Mesh( geometry, material );
+
+    /* 设置多边形的顶点数据 */
+    const node = new Float32Array( position );
+    const node_attribute = new three.BufferAttribute( node, 3 );
+
+    geometry.setAttribute( "position", node_attribute );
+
+    /* 设置多边形的顶点连接顺序 */
+    const index = new Uint16Array( triangulate( node, 3 ) );
+    const index_attribute = new three.BufferAttribute( index, 1 );
+
+    geometry.setIndex( index_attribute );
+    geometry.index.needsUpdate = true;
+
+    /*  */
+    geometry.computeBoundingBox();
+    geometry.computeBoundingSphere();
+
+    return polygon;
+
+}
+
+/* 绘制多边形 */
+drawPolygon();
+
+async function drawPolygon() {
+
+    /* 资源地址 */
+    const p_1_data_url = "/static/p-1.json";
+    const p_2_data_url = "/static/p-2.json";
+    const p_3_data_url = "/static/p-3.json";
+
+    /*  */
+    const p_1_data = await fecthData( p_1_data_url );
+    const p_2_data = await fecthData( p_2_data_url );
+    const p_3_data = await fecthData( p_3_data_url );
+
+    /*  */
+    let union;
+
+    union = merge( merge( p_1_data, p_2_data ), p_3_data );
+    union = union[ 0 ][ 0 ];
+
+    /*  */
+    const position = [];
+
+    for ( let i = 0; i < union.length; i++ ) {
+
+        const x = union[ i ][ 0 ];
+        const y = union[ i ][ 1 ];
+        const z = 0;
+
+        position.push( x, y, z );
+
+    }
+
+    /*  */
+    const polygon = createPolygon( position, 0xff00ff );
+
+    scene.add( polygon );
+
+    // const p_1 = createPolygon( p_1_data, 0xff0000 );
+    // const p_2 = createPolygon( p_2_data, 0x00ff00 );
+    // const p_3 = createPolygon( p_3_data, 0x0000ff );
+
+    // scene.add( p_1, p_2, p_3 );
+
+}
+
+/* ------------------------------------------------------------------------------------------------------ */
+/* Test */
+function merge( data_1, data_2 ) {
+
+    let union;
+
+    union = martinez.union( data_1, data_2 );
+
+    return union;
+
+}
+
+
