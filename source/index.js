@@ -10,6 +10,11 @@ import * as martinez from "martinez-polygon-clipping";
 
 import * as convertCoordinate from "./library/convertCoordinate";
 
+import * as data from "./data";
+
+/* Test */
+data.init();
+
 /* ------------------------------------------------------------------------------------------------------ */
 /* Renderer */
 const renderer = new three.WebGLRenderer({ antialias: window.devicePixelRatio < 2 });
