@@ -29,7 +29,7 @@ export default async function() {
 
     data = await load();
     data = await clean( data );
-    data = format( data );
+    data = formatting( data );
     data = deconstruct( data, 64 );
 
     return data;
@@ -88,7 +88,7 @@ async function clean( input ) {
 
 }
 
-function format( input ) {
+function formatting( input ) {
 
     const output = [];
 

@@ -42,12 +42,16 @@ async function main() {
 
     /* 获取风暴数据 */
     const data = await getStormData();
-
+    // console.log( data );
     /* 计算风暴数据的极值 */
     const bound = calculateBound( data );
 
     /* 根据极值数据调整相机的视锥体和位置 */
     updateCamera( bound );
+
+    /* 归类相交的多边形 */
+    _merge( data );
+
 
     /* 绘制多边形 */
     for( let i = 0; i < data.length; i++ ) {
@@ -176,6 +180,145 @@ function updateCamera( bound ) {
 
 }
 
+function _merge( data ) {
+
+    const clone = JSON.parse( JSON.stringify( data ) );
+
+    const intersections_index = [];
+
+    for ( let i = 0; i < clone.length; i++ ) {
+
+        if ( clone[ i ].isIntersectant ) continue;
+
+        const a = clone[ i ];
+
+        const a_x = a.center[ 0 ];
+        const a_y = a.center[ 1 ];
+        const a_r = a.radius;
+
+        const intersection_index = [ i ];
+
+        for ( let j = i + 1; j < clone.length; j++ ) {
+
+            if ( clone[ j ].isIntersectant ) continue;
+
+            const b = clone[ j ];
+
+            const b_x = b.center[ 0 ];
+            const b_y = b.center[ 1 ];
+            const b_r = b.radius;
+
+            /* 计算两点之间的距离 */
+            const distance = Math.hypot( a_x - b_x, a_y - b_y );
+
+            if ( distance > ( a_r + b_r ) ) continue;
+
+            a.isIntersectant = true;
+            b.isIntersectant = true;
+
+            intersection_index.push( j );
+
+        }
+
+        intersections_index.push( intersection_index );
+
+    }
+
+    const intersection = [];
+
+    for ( let i = 0; i < intersections_index.length; i++ ) {
+
+        const positions_array = [];
+
+        const intersection_index = intersections_index[ i ];
+
+        for ( let j = 0; i < intersection_index.length; i++ ) {
+
+            const index = intersection_index[ i ];
+
+            const positions = clone[ index ].positions;
+
+            positions_array.push( positions );
+
+        }
+
+        console.log( i );
+        console.log( positions_array );
+
+        const union = merge( positions_array );
+
+        intersection.push( union );
+
+    }
+    console.log( intersection );
+    return intersection;
+
+    function merge( positions_array ) {
+
+        const new_positions_array = [];
+
+        for ( let i = 0; i < positions_array.length; i++ ) {
+
+            const positions = positions_array[ i ];
+            const new_positions = formatting( positions );
+
+            new_positions_array.push( new_positions );
+
+        }
+
+        let result = new_positions_array[ 0 ];
+
+        for ( let i = 1; i < new_positions_array.length; i++ ) {
+
+            result = martinez.union( result, new_positions_array[ i ] );
+
+        }
+
+        result = reverseFormatting( result );
+
+        return result;
+
+        function formatting( positions ) {
+
+            const result = [ [] ];
+
+            for ( let i = 0; i < positions.length; i += 3 ) {
+
+                const x = positions[ i + 0 ];
+                const y = positions[ i + 1 ];
+
+                result[ 0 ].push( [ x, y ] );
+
+            }
+
+            return result;
+
+        }
+
+        function reverseFormatting( positions ) {
+
+            const result = [];
+
+            const temp = positions[ 0 ];
+
+            for ( let i = 0; i < temp.length; i++ ) {
+
+                const x = temp[ 0 ];
+                const y = temp[ 1 ];
+                const z = 0;
+
+                result.push( x, y, z );
+
+            }
+
+            return result;
+
+        }
+
+    }
+
+}
+
 /* 处理数据 */
 async function fecthData( url ) {
 
@@ -219,7 +362,7 @@ function createPolygon( position, color ) {
 }
 
 /* 绘制多边形 */
-// drawPolygon();
+drawPolygon();
 
 async function drawPolygon() {
 
@@ -232,7 +375,7 @@ async function drawPolygon() {
     const p_1_data = await fecthData( p_1_data_url );
     const p_2_data = await fecthData( p_2_data_url );
     const p_3_data = await fecthData( p_3_data_url );
-
+    // console.log( p_1_data );
     /*  */
     let union;
 
@@ -272,7 +415,7 @@ function merge( data_1, data_2 ) {
     let union;
 
     union = martinez.union( data_1, data_2 );
-
+// console.log( union );
     return union;
 
 }
