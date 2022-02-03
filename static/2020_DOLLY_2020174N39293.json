@@ -1,1 +1,234 @@
-{"data": {"message": "Success", "storm": {"type": "FeatureCollection", "crs": {"type": "name", "properties": {"name": "EPSG:4326"}}, "features": [{"type": "Feature", "geometry": {"type": "Point", "coordinates": [-61.6, 39.8]}, "properties": {"stormID": "2020174N39293", "segmentID": 362194, "windSpeed": 40, "minPressure": "1000.0", "category": "TS", "date": "06/23/2020 18"}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [-60.6, 40.2]}, "properties": {"stormID": "2020174N39293", "segmentID": 362195, "windSpeed": 35, "minPressure": "1002.0", "category": "TS", "date": "06/24/2020 00"}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [-66.2, 38.1]}, "properties": {"stormID": "2020174N39293", "segmentID": 362190, "windSpeed": 30, "minPressure": "1008.0", "category": "TD", "date": "06/22/2020 18"}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [-66.9, 38.4]}, "properties": {"stormID": "2020174N39293", "segmentID": 362189, "windSpeed": 30, "minPressure": "1009.0", "category": "TD", "date": "06/22/2020 12"}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [-55.6, 44.1]}, "properties": {"stormID": "2020174N39293", "segmentID": 362199, "windSpeed": 25, "minPressure": "1009.0", "category": "TD", "date": "06/25/2020 00"}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [-67.1, 38.6]}, "properties": {"stormID": "2020174N39293", "segmentID": 362188, "windSpeed": 30, "minPressure": "1010.0", "category": "TD", "date": "06/22/2020 06"}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [-57.1, 43]}, "properties": {"stormID": "2020174N39293", "segmentID": 362198, "windSpeed": 25, "minPressure": "1008.0", "category": "TD", "date": "06/24/2020 18"}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [-63.9, 39]}, "properties": {"stormID": "2020174N39293", "segmentID": 362192, "windSpeed": 35, "minPressure": "1003.0", "category": "TS", "date": "06/23/2020 06"}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [-62.7, 39.4]}, "properties": {"stormID": "2020174N39293", "segmentID": 362193, "windSpeed": 40, "minPressure": "1000.0", "category": "TS", "date": "06/23/2020 12"}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [-58.5, 42]}, "properties": {"stormID": "2020174N39293", "segmentID": 362197, "windSpeed": 30, "minPressure": "1007.0", "category": "TD", "date": "06/24/2020 12"}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [-59.6, 41]}, "properties": {"stormID": "2020174N39293", "segmentID": 362196, "windSpeed": 30, "minPressure": "1005.0", "category": "TD", "date": "06/24/2020 06"}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [-65.1, 38.5]}, "properties": {"stormID": "2020174N39293", "segmentID": 362191, "windSpeed": 30, "minPressure": "1007.0", "category": "TD", "date": "06/23/2020 00"}}]}, "queryTime": 3, "totalTime": 3}}
+{
+    "data": {
+        "message": "Success",
+        "storm": {
+            "type": "FeatureCollection",
+            "crs": {
+                "type": "name",
+                "properties": {
+                    "name": "EPSG:4326"
+                }
+            },
+            "features": [
+                {
+                    "type": "Feature",
+                    "geometry": {
+                        "type": "Point",
+                        "coordinates": [
+                            -61.6,
+                            39.8
+                        ]
+                    },
+                    "properties": {
+                        "stormID": "2020174N39293",
+                        "segmentID": 362194,
+                        "windSpeed": 40,
+                        "minPressure": "1000.0",
+                        "category": "TS",
+                        "date": "06/23/2020 18"
+                    }
+                },
+                {
+                    "type": "Feature",
+                    "geometry": {
+                        "type": "Point",
+                        "coordinates": [
+                            -60.6,
+                            40.2
+                        ]
+                    },
+                    "properties": {
+                        "stormID": "2020174N39293",
+                        "segmentID": 362195,
+                        "windSpeed": 35,
+                        "minPressure": "1002.0",
+                        "category": "TS",
+                        "date": "06/24/2020 00"
+                    }
+                },
+                {
+                    "type": "Feature",
+                    "geometry": {
+                        "type": "Point",
+                        "coordinates": [
+                            -66.2,
+                            38.1
+                        ]
+                    },
+                    "properties": {
+                        "stormID": "2020174N39293",
+                        "segmentID": 362190,
+                        "windSpeed": 30,
+                        "minPressure": "1008.0",
+                        "category": "TD",
+                        "date": "06/22/2020 18"
+                    }
+                },
+                {
+                    "type": "Feature",
+                    "geometry": {
+                        "type": "Point",
+                        "coordinates": [
+                            -66.9,
+                            38.4
+                        ]
+                    },
+                    "properties": {
+                        "stormID": "2020174N39293",
+                        "segmentID": 362189,
+                        "windSpeed": 30,
+                        "minPressure": "1009.0",
+                        "category": "TD",
+                        "date": "06/22/2020 12"
+                    }
+                },
+                {
+                    "type": "Feature",
+                    "geometry": {
+                        "type": "Point",
+                        "coordinates": [
+                            -55.6,
+                            44.1
+                        ]
+                    },
+                    "properties": {
+                        "stormID": "2020174N39293",
+                        "segmentID": 362199,
+                        "windSpeed": 25,
+                        "minPressure": "1009.0",
+                        "category": "TD",
+                        "date": "06/25/2020 00"
+                    }
+                },
+                {
+                    "type": "Feature",
+                    "geometry": {
+                        "type": "Point",
+                        "coordinates": [
+                            -67.1,
+                            38.6
+                        ]
+                    },
+                    "properties": {
+                        "stormID": "2020174N39293",
+                        "segmentID": 362188,
+                        "windSpeed": 30,
+                        "minPressure": "1010.0",
+                        "category": "TD",
+                        "date": "06/22/2020 06"
+                    }
+                },
+                {
+                    "type": "Feature",
+                    "geometry": {
+                        "type": "Point",
+                        "coordinates": [
+                            -57.1,
+                            43
+                        ]
+                    },
+                    "properties": {
+                        "stormID": "2020174N39293",
+                        "segmentID": 362198,
+                        "windSpeed": 25,
+                        "minPressure": "1008.0",
+                        "category": "TD",
+                        "date": "06/24/2020 18"
+                    }
+                },
+                {
+                    "type": "Feature",
+                    "geometry": {
+                        "type": "Point",
+                        "coordinates": [
+                            -63.9,
+                            39
+                        ]
+                    },
+                    "properties": {
+                        "stormID": "2020174N39293",
+                        "segmentID": 362192,
+                        "windSpeed": 35,
+                        "minPressure": "1003.0",
+                        "category": "TS",
+                        "date": "06/23/2020 06"
+                    }
+                },
+                {
+                    "type": "Feature",
+                    "geometry": {
+                        "type": "Point",
+                        "coordinates": [
+                            -62.7,
+                            39.4
+                        ]
+                    },
+                    "properties": {
+                        "stormID": "2020174N39293",
+                        "segmentID": 362193,
+                        "windSpeed": 40,
+                        "minPressure": "1000.0",
+                        "category": "TS",
+                        "date": "06/23/2020 12"
+                    }
+                },
+                {
+                    "type": "Feature",
+                    "geometry": {
+                        "type": "Point",
+                        "coordinates": [
+                            -58.5,
+                            42
+                        ]
+                    },
+                    "properties": {
+                        "stormID": "2020174N39293",
+                        "segmentID": 362197,
+                        "windSpeed": 30,
+                        "minPressure": "1007.0",
+                        "category": "TD",
+                        "date": "06/24/2020 12"
+                    }
+                },
+                {
+                    "type": "Feature",
+                    "geometry": {
+                        "type": "Point",
+                        "coordinates": [
+                            -59.6,
+                            41
+                        ]
+                    },
+                    "properties": {
+                        "stormID": "2020174N39293",
+                        "segmentID": 362196,
+                        "windSpeed": 30,
+                        "minPressure": "1005.0",
+                        "category": "TD",
+                        "date": "06/24/2020 06"
+                    }
+                },
+                {
+                    "type": "Feature",
+                    "geometry": {
+                        "type": "Point",
+                        "coordinates": [
+                            -65.1,
+                            38.5
+                        ]
+                    },
+                    "properties": {
+                        "stormID": "2020174N39293",
+                        "segmentID": 362191,
+                        "windSpeed": 30,
+                        "minPressure": "1007.0",
+                        "category": "TD",
+                        "date": "06/23/2020 00"
+                    }
+                }
+            ]
+        },
+        "queryTime": 3,
+        "totalTime": 3
+    }
+}

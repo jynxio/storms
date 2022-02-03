@@ -23,18 +23,14 @@ const filenames = [
     "2020_ZETA_2020299N18277",
 ];
 
-
-
-async function init() {
+export default async function() {
 
     let data;
 
     data = await load();
     data = await clean( data );
     data = format( data );
-    data = deconstruct( data, 16 );
-
-    console.log( data );
+    data = deconstruct( data, 64 );
 
     return data;
 
@@ -142,18 +138,22 @@ function deconstruct( input, segments ) {
 
             const new_x = Math.cos( theta ) * r + x;
             const new_y = Math.sin( theta ) * r + y;
-            const z = 0;
+            const new_z = 0;
 
-            positions.push( new_x, new_y, 0 );
+            positions.push( new_x, new_y, new_z );
 
         }
 
-        output.push( positions );
+        const new_feature = {};
+
+        new_feature.radius = r;
+        new_feature.center = [ x, y ];
+        new_feature.positions = positions;
+
+        output.push( new_feature );
 
     }
 
     return output;
 
 }
-
-export { init };
