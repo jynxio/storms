@@ -211,7 +211,7 @@ function _merge( data ) {
             /* 计算两点之间的距离 */
             const distance = Math.hypot( a_x - b_x, a_y - b_y );
 
-            if ( distance > ( a_r + b_r ) ) continue;
+            if ( distance >= ( a_r + b_r ) ) continue;
 
             a.isIntersectant = true;
             b.isIntersectant = true;
@@ -224,34 +224,29 @@ function _merge( data ) {
 
     }
 
-    const intersection = [];
+    const intersections_positions = [];
 
     for ( let i = 0; i < intersections_index.length; i++ ) {
 
-        const positions_array = [];
-
         const intersection_index = intersections_index[ i ];
 
-        for ( let j = 0; i < intersection_index.length; i++ ) {
+        const intersection_positions = [];
 
-            const index = intersection_index[ i ];
+        for ( let i = 0; i < intersection_index.length; i++ ) {
 
-            const positions = clone[ index ].positions;
+            const positions = data[ intersection_index[ i ] ].positions;
 
-            positions_array.push( positions );
+            intersection_positions.push( positions );
 
         }
 
-        console.log( i );
-        console.log( positions_array );
+        const merge_positions = merge( intersection_positions );
 
-        const union = merge( positions_array );
+        intersections_positions.push( merge_positions );
 
-        intersection.push( union );
+        console.log( merge_positions );
 
     }
-    console.log( intersection );
-    return intersection;
 
     function merge( positions_array ) {
 
@@ -266,32 +261,44 @@ function _merge( data ) {
 
         }
 
-        let result = new_positions_array[ 0 ];
+        let result;
 
-        for ( let i = 1; i < new_positions_array.length; i++ ) {
+        result = new_positions_array[ 0 ];
+        result = martinez.union( result, new_positions_array[ 1 ] );
+        result = martinez.union( result, new_positions_array[ 2 ] );
 
-            result = martinez.union( result, new_positions_array[ i ] );
+        console.log( result );
+        // console.log( new_positions_array[ 0 ] );
+        // console.log( new_positions_array[ 2 ] );
+        // TODO merge中的数组层数出了问题。
+        debugger;
 
-        }
+        // let result = new_positions_array[ 0 ];
 
-        result = reverseFormatting( result );
+        // for ( let i = 1; i < new_positions_array.length; i++ ) {
 
-        return result;
+        //     result = martinez.union( result, new_positions_array[ i ] );
+
+        // }
+
+        // result = reverseFormatting( result );
+
+        // return result;
 
         function formatting( positions ) {
 
-            const result = [ [] ];
+            const result = [];
 
             for ( let i = 0; i < positions.length; i += 3 ) {
 
                 const x = positions[ i + 0 ];
                 const y = positions[ i + 1 ];
 
-                result[ 0 ].push( [ x, y ] );
+                result.push( [ x, y ] );
 
             }
 
-            return result;
+            return [ [ result ] ];
 
         }
 
