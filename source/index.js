@@ -271,6 +271,7 @@ function _merge( data ) {
         // console.log( new_positions_array[ 0 ] );
         // console.log( new_positions_array[ 2 ] );
         // TODO merge中的数组层数出了问题。
+        // TODO
         debugger;
 
         // let result = new_positions_array[ 0 ];
