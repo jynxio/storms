@@ -8,6 +8,8 @@ import { triangulate } from "./library/earcut";
 
 import * as martinez from "martinez-polygon-clipping";
 
+import * as greinerhormann from "greiner-hormann";
+
 import getStormData from "./data";
 
 /* ------------------------------------------------------------------------------------------------------ */
@@ -42,34 +44,33 @@ async function main() {
 
     /* 获取风暴数据 */
     const data = await getStormData();
-    // console.log( data );
+
     /* 计算风暴数据的极值 */
     const bound = calculateBound( data );
 
     /* 根据极值数据调整相机的视锥体和位置 */
     updateCamera( bound );
 
-    /* 归类相交的多边形 */
-    _merge( data );
+    /*  */
+    union( data );
 
+    /* 绘制多边形网格 */
+    // for( let i = 0; i < data.length; i++ ) {
 
-    /* 绘制多边形 */
-    for( let i = 0; i < data.length; i++ ) {
+    //     const position = data[ i ].position;
 
-        const positions = data[ i ].positions;
+    //     const polygon = createPolygon( position, Math.round( Math.random() * 0xffffff ) );
 
-        const polygon = createPolygon( positions, Math.round( Math.random() * 0xffffff ) );
+    //     scene.add( polygon );
 
-        scene.add( polygon );
-
-    }
+    // }
 
 }
 
 /**
- * 计算风暴数据的极值。
- * @param   {Array} data - getStormData方法的返回值。
- * @returns {Array} 极值数组，依次是x_min、x_max、y_min、y_max。
+ * 计算风暴数据的极值
+ * @param   {Array} data - getStormData方法的返回值
+ * @returns {Array}      -极值数组，依次是x_min、x_max、y_min、y_max
  */
 function calculateBound( data ) {
 
@@ -80,12 +81,12 @@ function calculateBound( data ) {
 
     for ( let i = 0; i < data.length; i++ ) {
 
-        const positions = data[ i ].positions;
+        const position = data[ i ].position;
 
-        for ( let j = 0; j < positions.length; j += 3 ) {
+        for ( let j = 0; j < position.length; j += 3 ) {
 
-            const x = positions[ j + 0 ];
-            const y = positions[ j + 1 ];
+            const x = position[ j + 0 ];
+            const y = position[ j + 1 ];
 
             if ( x_min === undefined ) x_min = x;
             else x_min = Math.min( x_min, x );
@@ -120,8 +121,8 @@ function calculateBound( data ) {
 }
 
 /**
- * 调整相机的视锥体和位置。
- * @param {Array} bound - calculateBound方法的返回值。
+ * 调整相机的视锥体和位置
+ * @param {Array} bound - calculateBound方法的返回值
  */
 function updateCamera( bound ) {
 
@@ -180,7 +181,28 @@ function updateCamera( bound ) {
 
 }
 
-function _merge( data ) {
+/**
+ * 将相交的多边形融合在一起
+ * @param {Array} data - getStormData方法的返回值
+ */
+function union( data ) {
+
+    scene.add(
+        createPolygon( data[ 0 ].position, 0xff0000 ),
+        createPolygon( data[ 1 ].position, 0x00ff00 ),
+        createPolygon( data[ 3 ].position, 0xffff00 ),
+    );
+
+    const position_1 = [];
+    const position_2 = [];
+
+    console.log( pair_all );
+
+    function formatting() {}
+
+}
+
+function merge( data ) {
 
     const clone = JSON.parse( JSON.stringify( data ) );
 
@@ -234,116 +256,80 @@ function _merge( data ) {
 
         for ( let i = 0; i < intersection_index.length; i++ ) {
 
-            const positions = data[ intersection_index[ i ] ].positions;
+            const position = data[ intersection_index[ i ] ].position;
 
-            intersection_positions.push( positions );
+            intersection_positions.push( position );
 
         }
 
-        const merge_positions = merge( intersection_positions );
-
-        intersections_positions.push( merge_positions );
-
-        console.log( merge_positions );
+        intersections_positions.push( union( intersection_positions ) );
 
     }
 
-    function merge( positions_array ) {
+    return intersections_positions;
 
-        const new_positions_array = [];
+    function union( positions_array ) {
 
-        for ( let i = 0; i < positions_array.length; i++ ) {
+        let result = formatting( positions_array[ 0 ] );
 
-            const positions = positions_array[ i ];
-            const new_positions = formatting( positions );
+        for ( let i = 1; i < positions_array.length; i++ ) {
 
-            new_positions_array.push( new_positions );
-
-        }
-
-        let result;
-
-        result = new_positions_array[ 0 ];
-        result = martinez.union( result, new_positions_array[ 1 ] );
-        result = martinez.union( result, new_positions_array[ 2 ] );
-
-        console.log( result );
-        // console.log( new_positions_array[ 0 ] );
-        // console.log( new_positions_array[ 2 ] );
-        // TODO merge中的数组层数出了问题。
-        // TODO
-        debugger;
-
-        // let result = new_positions_array[ 0 ];
-
-        // for ( let i = 1; i < new_positions_array.length; i++ ) {
-
-        //     result = martinez.union( result, new_positions_array[ i ] );
-
-        // }
-
-        // result = reverseFormatting( result );
-
-        // return result;
-
-        function formatting( positions ) {
-
-            const result = [];
-
-            for ( let i = 0; i < positions.length; i += 3 ) {
-
-                const x = positions[ i + 0 ];
-                const y = positions[ i + 1 ];
-
-                result.push( [ x, y ] );
-
-            }
-
-            return [ [ result ] ];
+            result = martinez.union( result, formatting( positions_array[ i ] ) );
 
         }
 
-        function reverseFormatting( positions ) {
+        return reverseFormatting( result[ 0 ] );
 
-            const result = [];
+    }
 
-            const temp = positions[ 0 ];
+    function formatting( position ) {
 
-            for ( let i = 0; i < temp.length; i++ ) {
+        const result = [];
 
-                const x = temp[ 0 ];
-                const y = temp[ 1 ];
-                const z = 0;
+        for ( let i = 0; i < position.length; i += 3 ) {
 
-                result.push( x, y, z );
+            const x = position[ i + 0 ];
+            const y = position[ i + 1 ];
 
-            }
-
-            return result;
+            result.push( [ x, y ] );
 
         }
+
+        return [ [ result ] ];
+
+    }
+
+    function reverseFormatting( position ) {
+
+        const result = [];
+
+        const temp = position[ 0 ];
+
+        for ( let i = 0; i < temp.length; i += 2 ) {
+
+            const x = temp[ i ][ 0 ];
+            const y = temp[ i ][ 1 ];
+            const z = 0;
+
+            result.push( x, y, z );
+
+        }
+
+        return result;
 
     }
 
 }
 
-/* 处理数据 */
-async function fecthData( url ) {
-
-    let data;
-
-    data = await fetch( url );
-    data = await data.json();
-    data = data.features[ 0 ].geometry.coordinates; // 三维数组
-
-    return data;
-
-}
-
-/* 创建多边形 */
+/**
+ * 创建多边形网格
+ * @param   {Array<number>} position - 坐标数组，比如[x, y, z, x, y, z, ...]
+ * @param   {number}        color    - 颜色，比如0xffffff
+ * @returns {Object}                 - 多边形网格实例
+ */
 function createPolygon( position, color ) {
 
-    /* 创建多边形 */
+    /* 创建多边形网格 */
     const geometry = new three.BufferGeometry();
     const material = new three.MeshBasicMaterial( { side: three.DoubleSide, color: color, wireframe: false } );
     const polygon = new three.Mesh( geometry, material );
@@ -361,71 +347,10 @@ function createPolygon( position, color ) {
     geometry.setIndex( index_attribute );
     geometry.index.needsUpdate = true;
 
-    /*  */
+    /* 更新：防止几何体被视锥体剔除误杀 */
     geometry.computeBoundingBox();
     geometry.computeBoundingSphere();
 
     return polygon;
 
 }
-
-/* 绘制多边形 */
-drawPolygon();
-
-async function drawPolygon() {
-
-    /* 资源地址 */
-    const p_1_data_url = "/static/p-1.json";
-    const p_2_data_url = "/static/p-2.json";
-    const p_3_data_url = "/static/p-3.json";
-
-    /*  */
-    const p_1_data = await fecthData( p_1_data_url );
-    const p_2_data = await fecthData( p_2_data_url );
-    const p_3_data = await fecthData( p_3_data_url );
-    // console.log( p_1_data );
-    /*  */
-    let union;
-
-    union = merge( merge( p_1_data, p_2_data ), p_3_data );
-    union = union[ 0 ][ 0 ];
-
-    /*  */
-    const position = [];
-
-    for ( let i = 0; i < union.length; i++ ) {
-
-        const x = union[ i ][ 0 ];
-        const y = union[ i ][ 1 ];
-        const z = 0;
-
-        position.push( x, y, z );
-
-    }
-
-    /*  */
-    const polygon = createPolygon( position, 0xff00ff );
-
-    scene.add( polygon );
-
-    // const p_1 = createPolygon( p_1_data, 0xff0000 );
-    // const p_2 = createPolygon( p_2_data, 0x00ff00 );
-    // const p_3 = createPolygon( p_3_data, 0x0000ff );
-
-    // scene.add( p_1, p_2, p_3 );
-
-}
-
-/* ------------------------------------------------------------------------------------------------------ */
-/* Test */
-function merge( data_1, data_2 ) {
-
-    let union;
-
-    union = martinez.union( data_1, data_2 );
-// console.log( union );
-    return union;
-
-}
-
-

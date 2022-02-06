@@ -1,25 +1,25 @@
 import { convert4326To3857 } from "./library/convertCoordinate";
 
 const filenames = [
-    "2020_ARTHUR_2020138N28281",
-    "2020_BERTHA_2020148N32281",
-    "2020_BETA_2020261N21265",
-    "2020_CRISTOBAL_2020154N19269",
-    "2020_DELTA_2020279N16284",
-    "2020_DOLLY_2020174N39293",
-    "2020_EDOUARD_2020186N30289",
-    "2020_EPSILON_2020291N32305",
-    "2020_ETA_2020306N15288",
-    "2020_FAY_2020188N28271",
-    "2020_ISAIAS_2020211N13306",
-    "2020_KYLE_2020228N37286",
-    "2020_LAURA_2020233N14313",
-    "2020_OMAR_2020244N30279",
-    "2020_PAULETTE_2020251N17319",
-    "2020_RENE_2020251N15342",
+    // "2020_ARTHUR_2020138N28281",
+    // "2020_BERTHA_2020148N32281",
+    // "2020_BETA_2020261N21265",
+    // "2020_CRISTOBAL_2020154N19269",
+    // "2020_DELTA_2020279N16284",
+    // "2020_DOLLY_2020174N39293",
+    // "2020_EDOUARD_2020186N30289",
+    // "2020_EPSILON_2020291N32305",
+    // "2020_ETA_2020306N15288",
+    // "2020_FAY_2020188N28271",
+    // "2020_ISAIAS_2020211N13306",
+    // "2020_KYLE_2020228N37286",
+    // "2020_LAURA_2020233N14313",
+    // "2020_OMAR_2020244N30279",
+    // "2020_PAULETTE_2020251N17319",
+    // "2020_RENE_2020251N15342",
     "2020_SALLY_2020256N25281",
     "2020_TEDDY_2020256N11329",
-    "2020_THETA_2020314N28313",
+    // "2020_THETA_2020314N28313",
     "2020_ZETA_2020299N18277",
 ];
 
@@ -130,7 +130,7 @@ function deconstruct( input, segments ) {
         const y = feature.coordinate[ 1 ];
         const r = feature.radius;
 
-        const positions = [];
+        const position = [];
 
         for ( let j = 0; j < segments; j++ ) {
 
@@ -140,7 +140,7 @@ function deconstruct( input, segments ) {
             const new_y = Math.sin( theta ) * r + y;
             const new_z = 0;
 
-            positions.push( new_x, new_y, new_z );
+            position.push( new_x, new_y, new_z );
 
         }
 
@@ -148,7 +148,7 @@ function deconstruct( input, segments ) {
 
         new_feature.radius = r;
         new_feature.center = [ x, y ];
-        new_feature.positions = positions;
+        new_feature.position = position;
 
         output.push( new_feature );
 
