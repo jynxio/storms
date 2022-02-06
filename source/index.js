@@ -187,137 +187,118 @@ function updateCamera( bound ) {
  */
 function union( data ) {
 
-    scene.add(
-        createPolygon( data[ 0 ].position, 0xff0000 ),
-        createPolygon( data[ 1 ].position, 0x00ff00 ),
-        createPolygon( data[ 3 ].position, 0xffff00 ),
-    );
+    const intersections = [];
 
-    const position_1 = [];
-    const position_2 = [];
 
-    console.log( pair_all );
 
-    function formatting() {}
+    function isIntersect( center_1, center_2, radius_1, radius_2 ) {
+
+        const distance = Math.hypot(
+            center_1[ 0 ] - center_2[ 0 ],
+            center_1[ 1 ] - center_2[ 1 ],
+        );
+
+        if ( distance < ( radius_1 + radius_2 ) ) return true;
+
+        return false;
+
+    }
 
 }
 
-function merge( data ) {
+function _union( data ) {
 
-    const clone = JSON.parse( JSON.stringify( data ) );
+    const position_0 = convert3dTo2d( data[ 0 ].position );
+    const position_1 = convert3dTo2d( data[ 1 ].position );
+    const position_2 = convert3dTo2d( data[ 2 ].position );
+    const position_3 = convert3dTo2d( data[ 3 ].position );
+    const position_6 = convert3dTo2d( data[ 6 ].position );
+    const position_7 = convert3dTo2d( data[ 7 ].position );
+    const position_9 = convert3dTo2d( data[ 9 ].position );
+    const position_11 = convert3dTo2d( data[ 11 ].position );
+    const position_12 = convert3dTo2d( data[ 12 ].position );
+    const position_13 = convert3dTo2d( data[ 13 ].position );
 
-    const intersections_index = [];
+    let test_2d;
 
-    for ( let i = 0; i < clone.length; i++ ) {
+    test_2d = greinerhormann.union( position_1, position_2 );
+    test_2d = greinerhormann.union( test_2d[ 0 ], position_3 );
+    test_2d = greinerhormann.union( test_2d[ 0 ], position_6 );
+    test_2d = greinerhormann.union( test_2d[ 0 ], position_7 );
+    test_2d = greinerhormann.union( test_2d[ 0 ], position_9 );
+    test_2d = greinerhormann.union( test_2d[ 0 ], position_11 );
+    test_2d = greinerhormann.union( test_2d[ 0 ], position_12 );
+    test_2d = greinerhormann.union( test_2d[ 0 ], position_13 );
 
-        if ( clone[ i ].isIntersectant ) continue;
+    const test_3d = convert2dTo3d( test_2d[ 0 ] );
 
-        const a = clone[ i ];
+    scene.add(
+        createPolygon( test_3d, 0xff0000 ),
+        // createPolygon( data[ 0 ].position, 0xff0000 ),
+        // createPolygon( data[ 1 ].position, 0xffff00 ),
+        // createPolygon( data[ 2 ].position, 0xffff00 ),
+        // createPolygon( data[ 3 ].position, 0xffff00 ),
+        // createPolygon( data[ 4 ].position, 0xffff00 ),
+        // createPolygon( data[ 5 ].position, 0xffff00 ),
+        // createPolygon( data[ 6 ].position, 0xffff00 ),
+        // createPolygon( data[ 7 ].position, 0xffff00 ),
+        // createPolygon( data[ 8 ].position, 0xffff00 ),
+        // createPolygon( data[ 9 ].position, 0xff0000 ),
+        // createPolygon( data[ 11 ].position, 0x00ff00 ),
+        // createPolygon( data[ 12 ].position, 0x00ff00 ),
+        // createPolygon( data[ 13 ].position, 0x00ff00 ),
+        createPolygon( data[ 14 ].position, 0x00ff00 ),
+    );
 
-        const a_x = a.center[ 0 ];
-        const a_y = a.center[ 1 ];
-        const a_r = a.radius;
+    console.log( test_2d );
+    console.log( test_3d );
 
-        const intersection_index = [ i ];
+}
 
-        for ( let j = i + 1; j < clone.length; j++ ) {
+/**
+     * 将存储2d坐标的二维数组转换为存储3d坐标的一维数组。
+     * @param {Array<number>} position_2d 2d坐标对的集合，比如[ [ x, y ], [ x, y ], ... ]
+     * @returns {Array<number>} - 3d坐标的集合，比如[ x, y, z, x, y, z, ... ]
+     */
+function convert2dTo3d( position_2d ) {
 
-            if ( clone[ j ].isIntersectant ) continue;
+    const position_3d = [];
 
-            const b = clone[ j ];
+    for ( let i = 0; i < position_2d.length; i++ ) {
 
-            const b_x = b.center[ 0 ];
-            const b_y = b.center[ 1 ];
-            const b_r = b.radius;
+        const x = position_2d[ i ][ 0 ];
+        const y = position_2d[ i ][ 1 ];
+        const z = 0;
 
-            /* 计算两点之间的距离 */
-            const distance = Math.hypot( a_x - b_x, a_y - b_y );
-
-            if ( distance >= ( a_r + b_r ) ) continue;
-
-            a.isIntersectant = true;
-            b.isIntersectant = true;
-
-            intersection_index.push( j );
-
-        }
-
-        intersections_index.push( intersection_index );
-
-    }
-
-    const intersections_positions = [];
-
-    for ( let i = 0; i < intersections_index.length; i++ ) {
-
-        const intersection_index = intersections_index[ i ];
-
-        const intersection_positions = [];
-
-        for ( let i = 0; i < intersection_index.length; i++ ) {
-
-            const position = data[ intersection_index[ i ] ].position;
-
-            intersection_positions.push( position );
-
-        }
-
-        intersections_positions.push( union( intersection_positions ) );
-
-    }
-
-    return intersections_positions;
-
-    function union( positions_array ) {
-
-        let result = formatting( positions_array[ 0 ] );
-
-        for ( let i = 1; i < positions_array.length; i++ ) {
-
-            result = martinez.union( result, formatting( positions_array[ i ] ) );
-
-        }
-
-        return reverseFormatting( result[ 0 ] );
+        position_3d.push( x, y, z );
 
     }
 
-    function formatting( position ) {
+    return position_3d;
 
-        const result = [];
+}
 
-        for ( let i = 0; i < position.length; i += 3 ) {
+/**
+     * 将存储3d坐标的一维数组转换为存储2d坐标的二维数组。
+     * @param {Array<number>} position_3d - 3d坐标的集合，比如[ x, y, z, x, y, z, ... ]
+     * @returns {Array<number>} - 2d坐标对的集合，是个二维数组，比如[ [ x, y ], [ x, y ], ... ]
+     */
+function  convert3dTo2d( position_3d ) {
 
-            const x = position[ i + 0 ];
-            const y = position[ i + 1 ];
+    const position_2d = [];
 
-            result.push( [ x, y ] );
+    for ( let i = 0; i < position_3d.length; i += 3 ) {
 
-        }
+        const x = position_3d[ i + 0 ];
+        const y = position_3d[ i + 1 ];
 
-        return [ [ result ] ];
+        const pair = [ x, y ];
 
-    }
-
-    function reverseFormatting( position ) {
-
-        const result = [];
-
-        const temp = position[ 0 ];
-
-        for ( let i = 0; i < temp.length; i += 2 ) {
-
-            const x = temp[ i ][ 0 ];
-            const y = temp[ i ][ 1 ];
-            const z = 0;
-
-            result.push( x, y, z );
-
-        }
-
-        return result;
+        position_2d.push( pair );
 
     }
+
+    return position_2d;
 
 }
 
