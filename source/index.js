@@ -189,7 +189,11 @@ function union( data ) {
 
     const intersections = [];
 
+    intersections.push( [ 0 ] );
 
+    data.forEach( item => {
+
+    } );
 
     function isIntersect( center_1, center_2, radius_1, radius_2 ) {
 
