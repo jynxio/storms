@@ -10,6 +10,8 @@ import * as martinez from "martinez-polygon-clipping";
 
 import * as greinerhormann from "greiner-hormann";
 
+import { cluster } from "./library/booleanOperation";
+
 import getStormData from "./data";
 
 /* ------------------------------------------------------------------------------------------------------ */
@@ -52,7 +54,11 @@ async function main() {
     updateCamera( bound );
 
     /*  */
-    union( data );
+    // console.log( data );
+
+    const test_index = cluster( ...data );
+
+    console.log( test_index );
 
     /* 绘制多边形网格 */
     // for( let i = 0; i < data.length; i++ ) {
@@ -181,36 +187,7 @@ function updateCamera( bound ) {
 
 }
 
-/**
- * 将相交的多边形融合在一起
- * @param {Array} data - getStormData方法的返回值
- */
-function union( data ) {
-
-    const intersections = [];
-
-    intersections.push( [ 0 ] );
-
-    data.forEach( item => {
-
-    } );
-
-    function isIntersect( center_1, center_2, radius_1, radius_2 ) {
-
-        const distance = Math.hypot(
-            center_1[ 0 ] - center_2[ 0 ],
-            center_1[ 1 ] - center_2[ 1 ],
-        );
-
-        if ( distance < ( radius_1 + radius_2 ) ) return true;
-
-        return false;
-
-    }
-
-}
-
-function _union( data ) {
+function showTheCircle( data ) {
 
     const position_0 = convert3dTo2d( data[ 0 ].position );
     const position_1 = convert3dTo2d( data[ 1 ].position );

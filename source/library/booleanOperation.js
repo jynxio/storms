@@ -2,9 +2,9 @@ import * as greinerhormann from "greiner-hormann";
 
 /**
  * 融合多边形。
- * @param {Array} input - 一个数组，它存储了零或多个多边形的顶点坐标，比如[ position_1, position_2, ... ]，其中
- * position_1是[ x, y, z, x, y, z, ... ]，注意position_1必须和position_2相交，position_2必须和position_3相
- * 交，诸如此类。
+ * @param {Array} input - 一个数组，它存储了零或多个多边形的顶点坐标，比如[ position_0, position_1, ... ]，其中
+ * position_0是[ x, y, z, x, y, z, ... ]，注意position_1必须和position_0相交，position_2必须前面的合体相交（即
+ * position_0和position_1的合体会与position_2相交），以此类推。
  * @returns {Array} - 一个数组，它存储了一个多边形的顶点坐标，比如[ x, y, z, x, y, z, ... ]
  */
 function union( ...input ) {
@@ -35,9 +35,8 @@ function union( ...input ) {
  * 聚类多边形，将相交的多边形聚合在一起。
  * @param {Array} input - 一个数组，它存储了零或多个圆形的几何信息，比如[ circle_1, circle_2, ... ]，其中circle_1是由
  * 圆心坐标和半径组成的键值对，比如{ center: [ 0, 0 ], radius: 100 }。
- * @returns {Array} - 一个数组，比如[ [ 0,1,2 ], [ 3,4,5 ] ]表示聚类出2个簇，[ 0,1,2 ]表示input[0]和input[1]相交，
- * input[1]和input[2]相交，[ 3,4,5 ]表示input[3]和input[4]相交，input[4]和input[5]相交。注意，虽然0、1、2可以融合为一
- * 个多边形，但是input[0]和input[2]不一定相交
+ * @returns {Array} - 一个数组，比如[ [ 0,1,2 ], [ 3,4,5 ] ]表示聚类出2个簇，[ 0,1,2 ]表示input[1]和input[0]相交，
+ * input[2]和前面的合体相交（即input[0]和input[1]的合体会与input[2]相交），以此类推。
  */
 function cluster( ...input ) {
 
@@ -52,17 +51,43 @@ function cluster( ...input ) {
 
         if ( isCluster[ i ] ) continue;
 
+        isCluster[ i ] = true;
+
         const index = [ i ];
-
-        for ( let j = i + 1; j < input.length; j++ ) {
-
-            
-
-        }
 
         output.push( index );
 
+        for ( let j = 0; j < input.length; j++ ) {
+
+            if ( isCluster[ j ] ) continue;
+
+            const a = input[ j ];
+            const a_center = a.center;
+            const a_radius = a.radius;
+
+            for ( let k = 0; k < index.length; k++ ) {
+
+                const b = input[ index[ k ] ];
+                const b_center = b.center;
+                const b_radius = b.radius;
+
+                const is_intersect = isIntersect( a_center, b_center, a_radius, b_radius );
+
+                if ( !is_intersect ) continue;
+
+                index.splice( k + 1, 0, j );
+
+                isCluster[ j ] = true;
+
+                break;
+
+            }
+
+        }
+
     }
+
+    return output;
 
 }
 
@@ -140,4 +165,4 @@ function convert2dTo3d( input ) {
 
 }
 
-export { union };
+export { union, cluster };
