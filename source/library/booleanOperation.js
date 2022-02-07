@@ -44,6 +44,26 @@ function cluster( ...input ) {
     if ( input.length === 0 ) return [ [] ];
     if ( input.length === 1 ) return [ [ 0 ] ];
 
+    const output = [];
+
+    const isCluster = input.map( _ => false );
+
+    for ( let i = 0; i < input.length; i++ ) {
+
+        if ( isCluster[ i ] ) continue;
+
+        const index = [ i ];
+
+        for ( let j = i + 1; j < input.length; j++ ) {
+
+            
+
+        }
+
+        output.push( index );
+
+    }
+
 }
 
 /**
