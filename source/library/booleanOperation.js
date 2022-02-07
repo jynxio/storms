@@ -7,12 +7,12 @@ import * as greinerhormann from "greiner-hormann";
  * 交，诸如此类。
  * @returns {Array} - 一个数组，它存储了一个多边形的顶点坐标，比如[ x, y, z, x, y, z, ... ]
  */
-export default function( ...input ) {
+function union( ...input ) {
 
     if ( input.length === 0 ) return input;
     if ( input.length === 1 ) return input[ 0 ];
 
-    let union = convert3dTo2d( input[ 0 ] );
+    let result = convert3dTo2d( input[ 0 ] );
 
     let index = 1;
 
@@ -20,14 +20,29 @@ export default function( ...input ) {
 
         const next = convert3dTo2d( input[ index ] );
 
-        union = greinerhormann.union( union, next );
-        union = union[ 0 ];
+        result = greinerhormann.union( result, next );
+        result = result[ 0 ];
 
         index++;
 
     }
 
-    return union;
+    return result;
+
+}
+
+/**
+ * 聚类多边形，将相交的多边形聚合在一起。
+ * @param {Array} input - 一个数组，它存储了零或多个圆形的几何信息，比如[ circle_1, circle_2, ... ]，其中circle_1是由
+ * 圆心坐标和半径组成的键值对，比如{ center: [ 0, 0 ], radius: 100 }。
+ * @returns {Array} - 一个数组，比如[ [ 0,1,2 ], [ 3,4,5 ] ]表示聚类出2个簇，[ 0,1,2 ]表示input[0]和input[1]相交，
+ * input[1]和input[2]相交，[ 3,4,5 ]表示input[3]和input[4]相交，input[4]和input[5]相交。注意，虽然0、1、2可以融合为一
+ * 个多边形，但是input[0]和input[2]不一定相交
+ */
+function cluster( ...input ) {
+
+    if ( input.length === 0 ) return [ [] ];
+    if ( input.length === 1 ) return [ [ 0 ] ];
 
 }
 
@@ -104,3 +119,5 @@ function convert2dTo3d( input ) {
     return output;
 
 }
+
+export { union };
