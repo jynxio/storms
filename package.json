@@ -16,7 +16,7 @@
     "dependencies": {
         "greiner-hormann": "^1.4.2",
         "lil-gui": "^0.16.0",
-        "martinez-polygon-clipping": "^0.7.1",
+        "polybooljs": "^1.2.0",
         "stats-js": "^1.0.1",
         "three": "^0.137.4"
     }

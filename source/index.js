@@ -58,7 +58,7 @@ async function main() {
 
     const test_positions = [];
 
-    for ( let i = 0; i < 46; i++ ) { // length: 637
+    for ( let i = 0; i < 10; i++ ) { // length: 637
 
         scene.add( createPolygon( data[ first_cluster[ i ] ].position, 0xffffff, false ) );
 
@@ -66,9 +66,16 @@ async function main() {
 
     }
 
-    scene.add(
-        createPolygon( booleanOperation.union( ...test_positions ), 0xff0000, true ),
-    );
+    const union = booleanOperation.union( ...test_positions );
+    console.log( union );
+    union.forEach( item => {
+
+        scene.add( createPolygon( item, Math.round( Math.random() * 0xffffff ), true ) );
+
+    } );
+    // scene.add(
+    //     createPolygon( union, 0xff0000, true ),
+    // );
 
     /* 绘制多边形 */
     for ( let i = 0; i < clusters.length; i++ ) {
