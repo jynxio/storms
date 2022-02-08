@@ -1,4 +1,8 @@
 /**
+ * 该算法可能在未来失效，如果你想要进行准确的坐标转换，则需要使用truf.js的toWgs84和toMercator方法。
+ */
+
+/**
  * 坐标转换，将基于EPSG4326的坐标转换为基于ERPSG3857的坐标。
  * @param   {number} lon      - 经度（基于EPSG4326）。
  * @param   {number} lat      - 纬度（基于EPSG4326）。

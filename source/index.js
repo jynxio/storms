@@ -6,10 +6,6 @@ import * as three from "three";
 
 import { triangulate } from "./library/earcut";
 
-import * as martinez from "martinez-polygon-clipping";
-
-import * as greinerhormann from "greiner-hormann";
-
 import * as booleanOperation from "./library/booleanOperation";
 
 import getStormData from "./data";
@@ -60,12 +56,6 @@ async function main() {
 
     const positions = first_cluster.map( index => data[ index ].position );
 
-    const union = booleanOperation.union( ...positions );
-
-    const polygon = createPolygon( union, 0xffffff, false );
-
-    // scene.add( polygon );
-
     const test_positions = [];
 
     for ( let i = 0; i < 46; i++ ) { // length: 637
@@ -79,27 +69,6 @@ async function main() {
     scene.add(
         createPolygon( booleanOperation.union( ...test_positions ), 0xff0000, true ),
     );
-
-    // scene.add(
-    //     createPolygon( data[ 0 ].position, 0xff0000, false ),
-    //     createPolygon( data[ 398 ].position, 0xff0000, false ),
-    //     createPolygon( data[ 401 ].position, 0xff0000, false ),
-    //     createPolygon( data[ 404 ].position, 0xff0000, false ),
-    // );
-
-    // const unions = clusters.map( cluster => {
-
-    //     const positions = cluster.map( index => data[ index ].position );
-
-    //     const union = booleanOperation.union( ...positions );
-
-    //     const polygon = createPolygon( union, Math.round( Math.random() * 0xffffff ), true );
-
-    //     scene.add( polygon );
-
-    //     return union;
-
-    // } );
 
     /* 绘制多边形 */
     for ( let i = 0; i < clusters.length; i++ ) {
