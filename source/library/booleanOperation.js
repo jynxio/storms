@@ -27,6 +27,8 @@ function union( ...input ) {
 
     }
 
+    result = convert2dTo3d( result );
+
     return result;
 
 }
@@ -78,6 +80,8 @@ function cluster( ...input ) {
                 index.splice( k + 1, 0, j );
 
                 isCluster[ j ] = true;
+
+                j = 0;
 
                 break;
 

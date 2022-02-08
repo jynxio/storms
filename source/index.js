@@ -10,7 +10,7 @@ import * as martinez from "martinez-polygon-clipping";
 
 import * as greinerhormann from "greiner-hormann";
 
-import { cluster } from "./library/booleanOperation";
+import * as booleanOperation from "./library/booleanOperation";
 
 import getStormData from "./data";
 
@@ -53,23 +53,69 @@ async function main() {
     /* 根据极值数据调整相机的视锥体和位置 */
     updateCamera( bound );
 
-    /*  */
-    // console.log( data );
+    /* 将相交的多边形合并在一起 */
+    const clusters = booleanOperation.cluster( ...data ); // 最大的融合体似乎融合错误了
 
-    const test_index = cluster( ...data );
+    const first_cluster = clusters[ 0 ];
 
-    console.log( test_index );
+    const positions = first_cluster.map( index => data[ index ].position );
 
-    /* 绘制多边形网格 */
-    // for( let i = 0; i < data.length; i++ ) {
+    const union = booleanOperation.union( ...positions );
 
-    //     const position = data[ i ].position;
+    const polygon = createPolygon( union, 0xffffff, false );
 
-    //     const polygon = createPolygon( position, Math.round( Math.random() * 0xffffff ) );
+    // scene.add( polygon );
+
+    const test_positions = [];
+
+    for ( let i = 0; i < 46; i++ ) { // length: 637
+
+        scene.add( createPolygon( data[ first_cluster[ i ] ].position, 0xffffff, false ) );
+
+        test_positions.push( positions[ i ] );
+
+    }
+
+    scene.add(
+        createPolygon( booleanOperation.union( ...test_positions ), 0xff0000, true ),
+    );
+
+    // scene.add(
+    //     createPolygon( data[ 0 ].position, 0xff0000, false ),
+    //     createPolygon( data[ 398 ].position, 0xff0000, false ),
+    //     createPolygon( data[ 401 ].position, 0xff0000, false ),
+    //     createPolygon( data[ 404 ].position, 0xff0000, false ),
+    // );
+
+    // const unions = clusters.map( cluster => {
+
+    //     const positions = cluster.map( index => data[ index ].position );
+
+    //     const union = booleanOperation.union( ...positions );
+
+    //     const polygon = createPolygon( union, Math.round( Math.random() * 0xffffff ), true );
 
     //     scene.add( polygon );
 
-    // }
+    //     return union;
+
+    // } );
+
+    /* 绘制多边形 */
+    for ( let i = 0; i < clusters.length; i++ ) {
+
+        const hex = Math.round( Math.random() * 0xffffff );
+
+        clusters[ i ].forEach( item => {
+
+            const position = data[ item ].position;
+            const polygon = createPolygon( position, 0xffffff, true );
+
+            // scene.add( polygon );
+
+        } );
+
+    }
 
 }
 
@@ -289,11 +335,11 @@ function  convert3dTo2d( position_3d ) {
  * @param   {number}        color    - 颜色，比如0xffffff
  * @returns {Object}                 - 多边形网格实例
  */
-function createPolygon( position, color ) {
+function createPolygon( position, color, wireframe ) {
 
     /* 创建多边形网格 */
     const geometry = new three.BufferGeometry();
-    const material = new three.MeshBasicMaterial( { side: three.DoubleSide, color: color, wireframe: false } );
+    const material = new three.MeshBasicMaterial( { side: three.DoubleSide, color: color, wireframe } );
     const polygon = new three.Mesh( geometry, material );
 
     /* 设置多边形的顶点数据 */
