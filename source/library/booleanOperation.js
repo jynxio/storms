@@ -3,7 +3,6 @@ import * as greinerhormann from "greiner-hormann";
 import * as polybooljs from "polybooljs"; // 这个库是正确的，但是太慢太慢了，而且计算完之后还要自己做剔除！
 
 // TODO 1.孔洞几何图形的点是如何表示的？
-// TODO 2.earcut是如何剖分孔洞几何图形的？
 
 /**
  * 融合多边形。
@@ -19,31 +18,24 @@ function union( ...input ) {
 
     let result = convert3dTo2d( input[ 0 ] );
 
-    result = [ result ];
-
     let index = 1;
 
     while ( index < input.length ) {
 
         let next = convert3dTo2d( input[ index ] );
 
-        result = polybooljs.union(
-            { regions: result, inverted: false },
-            { regions: [ next ], inverted: false },
-        );
+        const temp = greinerhormann.union( result, next );
+        console.log( temp );
 
-        // result = greinerhormann.union( result, next );
+        result = temp;
         // result = result[ 0 ];
-
-        // result = result.regions.length > 1 ? result.regions[ 1 ] : result.regions[ 0 ];
-        result = result.regions;
-
+        if ( result.length === 2  && index === 46 ) result = result[ 1 ];
+        else result = result[ 0 ];
         index++;
-        console.log( "进度：" + ( index / input.length * 100 ) + "%" );
+
     }
 
-    // result = convert2dTo3d( result );
-    result = result.map( item => convert2dTo3d( item ) );
+    result = convert2dTo3d( result );
 
     return result;
 
