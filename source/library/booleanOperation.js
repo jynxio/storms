@@ -2,6 +2,9 @@ import * as greinerhormann from "greiner-hormann";
 
 import * as polybooljs from "polybooljs"; // 这个库是正确的，但是太慢太慢了，而且计算完之后还要自己做剔除！
 
+// TODO 1.孔洞几何图形的点是如何表示的？
+// TODO 2.earcut是如何剖分孔洞几何图形的？
+
 /**
  * 融合多边形。
  * @param {Array} input - 一个数组，它存储了零或多个多边形的顶点坐标，比如[ position_0, position_1, ... ]，其中
