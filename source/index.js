@@ -9,7 +9,7 @@ import { triangulate } from "./library/earcut";
 import * as booleanOperation from "./library/booleanOperation";
 
 import getStormData from "./data";
-
+// TODO 准备套用新方案：simplecode-turfunion
 /* ------------------------------------------------------------------------------------------------------ */
 /* Renderer */
 const renderer = new three.WebGLRenderer({ antialias: window.devicePixelRatio < 2 });
