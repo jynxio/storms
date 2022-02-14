@@ -14,6 +14,7 @@
         "webpack-merge": "^5.8.0"
     },
     "dependencies": {
+        "@turf/projection": "^6.5.0",
         "@turf/union": "^6.5.0",
         "earcut": "^2.2.3",
         "lil-gui": "^0.16.1",
