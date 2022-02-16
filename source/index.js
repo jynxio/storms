@@ -55,6 +55,15 @@ function main() {
 
     updateFrustum( data );
 
+    // data.forEach( item => {
+
+    //     item.geometry.type = "MultiPolygon";
+    //     item.geometry.coordinates = [ item.geometry.coordinates ];
+
+    //     drawMesh( item );
+
+    // } );
+
     data = union( data );
 
     drawMesh( data );
