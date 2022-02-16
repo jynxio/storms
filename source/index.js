@@ -6,6 +6,8 @@ import * as three from "three";
 
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 
+import Gui from "lil-gui";
+
 import earcut from "earcut";
 
 import turfunion from "@turf/union";
@@ -49,24 +51,35 @@ main();
 
 function main() {
 
-    let data;
+    /*  */
+    const discrete_data = getData();
+    const discrete_mesh = createDiscreteMesh( discrete_data );
 
-    data = getData();
+    discrete_mesh.visible = false;
 
-    updateFrustum( data );
+    scene.add( discrete_mesh );
 
-    // data.forEach( item => {
+    /*  */
+    const union_data = union( discrete_data );
+    const union_mesh = createUnionMesh( union_data );
 
-    //     item.geometry.type = "MultiPolygon";
-    //     item.geometry.coordinates = [ item.geometry.coordinates ];
+    scene.add( union_mesh );
 
-    //     drawMesh( item );
+    /*  */
+    updateFrustum( discrete_data );
 
-    // } );
+    /* Debug */
+    const gui = new Gui();
+    const debug_options = {
+        toggle: _ => {
 
-    data = union( data );
+            union_mesh.visible = !union_mesh.visible;
+            discrete_mesh.visible = !discrete_mesh.visible;
 
-    drawMesh( data );
+        },
+    };
+
+    gui.add( debug_options, "toggle" );
 
 }
 
@@ -146,90 +159,109 @@ function updateFrustum( input ) {
 
 }
 
-function drawMesh( input ) {
+function createDiscreteMesh( input ) {
 
-    if ( input.geometry.type !== "MultiPolygon" ) {
+    const output = new three.Group();
 
-        console.error( "该函数只处理MultiPolygonn类型的GeoJSON。" );
+    input.forEach( item => {
 
-        return;
+        const polygon_coordinates = item.geometry.coordinates;
 
-    }
+        const mesh = createMesh( polygon_coordinates, Math.round( Math.random() * 0xffffff ), false )
+        const bone = createMesh( polygon_coordinates, 0xffffff, true );
 
-    input.geometry.coordinates.forEach( polygon_coordinates => {
+        const group = new three.Group().add( mesh, bone );
 
-        const color = Math.round( Math.random() * 0xffffff );
-        const wireframe = false;
-
-        scene.add( createMesh( polygon_coordinates, color, wireframe ) );
+        output.add( group );
 
     } );
 
-    input.geometry.coordinates.forEach( polygon_coordinates => {
+    return output;
 
-        scene.add( createMesh( polygon_coordinates, 0xffffff, true ) );
+}
+
+function createUnionMesh( input ) {
+
+    const output = new three.Group();
+
+    input.forEach( item => {
+
+        const group = new three.Group();
+
+        item.geometry.coordinates.forEach( item => {
+
+            const mesh = createMesh( item, Math.round( Math.random() * 0xffffff ), false )
+            const bone = createMesh( item, 0xffffff, true );
+
+            group.add( new three.Group().add( mesh, bone ) );
+
+        } );
+
+        output.add( group );
 
     } );
 
-    function createMesh( polygon_coordinates, color, wireframe ) {
+    return output;
 
-        /* flatten数据 */
-        const coordinates = polygon_coordinates;
+}
 
-        const vertex = [];
-        const hole = [];
-        const dimensions = 3;
+function createMesh( polygon_coordinates, color, wireframe ) {
 
-        for ( let i = 0; i < coordinates.length; i++ ) {
+    /* flatten数据 */
+    const coordinates = polygon_coordinates;
 
-            const linear_ring = coordinates[ i ];
+    const vertex = [];
+    const hole = [];
+    const dimensions = 3;
 
-            /* 处理轮廓数据。 */
-            linear_ring.forEach( position => {
+    for ( let i = 0; i < coordinates.length; i++ ) {
 
-                const [ x, y ] = position;
+        const linear_ring = coordinates[ i ];
 
-                vertex.push( x, y, 0 );
+        /* 处理轮廓数据。 */
+        linear_ring.forEach( position => {
 
-            } );
+            const [ x, y ] = position;
 
-            if ( i <= 0 ) continue;
+            vertex.push( x, y, 0 );
 
-            /* 处理孔数据。 */
-            const previous_linear_ring = coordinates[ i - 1 ];
+        } );
 
-            hole.push(
-                hole.length === 0
-                ? previous_linear_ring.length
-                : previous_linear_ring.length + hole[ hole.length - 1 ]
-            );
+        if ( i <= 0 ) continue;
 
-        }
+        /* 处理孔数据。 */
+        const previous_linear_ring = coordinates[ i - 1 ];
 
-        /* 生成mesh */
-        const geometry = new three.BufferGeometry();
-        const material = new three.MeshBasicMaterial( { side: three.DoubleSide, color, wireframe } );
-        const mesh = new three.Mesh( geometry, material );
-
-        let position;
-        position = new Float32Array( vertex );
-        position = new three.BufferAttribute( position, 3 );
-
-        geometry.setAttribute( "position", position );
-
-        let index;
-        index = new Uint16Array( earcut( vertex, hole.length === 0 ? null : hole, dimensions ) );
-        index = new three.BufferAttribute( index, 1 );
-
-        geometry.setIndex( index );
-        geometry.index.needsUpdate = true;
-
-        geometry.computeBoundingBox();
-        geometry.computeBoundingSphere();
-
-        return mesh;
+        hole.push(
+            hole.length === 0
+            ? previous_linear_ring.length
+            : previous_linear_ring.length + hole[ hole.length - 1 ]
+        );
 
     }
+
+    /* 生成mesh */
+    const geometry = new three.BufferGeometry();
+    const material = new three.MeshBasicMaterial( { side: three.DoubleSide, color, wireframe } );
+    const mesh = new three.Mesh( geometry, material );
+
+    let position;
+    position = new Float32Array( vertex );
+    position = new three.BufferAttribute( position, 3 );
+
+    geometry.setAttribute( "position", position );
+
+    let index;
+    index = new Uint16Array( earcut( vertex, hole.length === 0 ? null : hole, dimensions ) );
+    index = new three.BufferAttribute( index, 1 );
+
+    geometry.setIndex( index );
+    geometry.index.needsUpdate = true;
+
+    geometry.computeBoundingBox();
+    geometry.computeBoundingSphere();
+
+    return mesh;
 
 }
 
@@ -245,6 +277,6 @@ function union( input ) {
 
     }
 
-    return output;
+    return [ output ];
 
 }
