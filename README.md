@@ -1,29 +1,31 @@
-# toy-storm
-> 重写该demo，更名为 simple-turfunion，使用R树加速处理
-
+# storm
 ## 概述
 
-该 demo 做了 2 件事情：
+该项目演示了如何使用 [@turf/union](https://www.npmjs.com/package/@turf/union) 来融合数量超多的几何图形，并且使用 [earcut](https://www.npmjs.com/package/earcut) 和 [three.js](https://www.npmjs.com/package/three) 来绘制融合后的集合图形。
 
-1. 将离散的飓风点数据渲染成离散的圆形几何；
-2. 融合离散的圆形几何；
+## 原始
 
-离散的圆形几何：  
+下图是融合之前的状态，图像中的圆形是根据真实的飓风数据所生成的，飓风的风速越快，圆形的半径越大。我们准备将所有的圆形都融合为一个几何图形。
 
-![](./image-hosting/source.png)   
+![原始图像](./image-hosting/origin.png)
 
-融合离散的圆形几何：  
+## 结果
 
-![](./image-hosting/union.png)  
+下图是融合之后的状态，所有的圆形都被融合成了一个几何图形，我使用线条来描绘出了它的三角剖分的结果。
 
-## 在线示例
+右上角的 `Controls` 栏可以切换融合前与融合后的状态。
 
-https://storm-sooty.vercel.app/  
+![结果图像](./image-hosting/result.png)
 
-## 使用
+## 优化
 
-- 下载。
-- 执行 `npm run install`。
-- 执行 `npm run start`。
+该项目是通过遍历来融合所有圆形的，在实际应用中，可以考虑使用 R 树算法来替代遍历，这样可以显著提升程序的性能。
 
-> 注意：因数据下载与融合过程较慢，故首屏渲染时间较长，请耐心等待30s。
+## 运行
+
+依次执行下述命令，来运行该项目：
+
+1. `npm install`
+2. `npm run start`
+
+由于程序的计算量较大，因此该程序在初次打开时，会经历一段白屏时间，这代表着程序正在运算中，稍等片刻就可以呈现出结果了。
