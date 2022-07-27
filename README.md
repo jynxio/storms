@@ -1,4 +1,4 @@
-# storm
+# storms
 ## 概述
 
 该项目演示了如何使用 [@turf/union](https://www.npmjs.com/package/@turf/union) 来融合数量超多的几何图形，并且使用 [earcut](https://www.npmjs.com/package/earcut) 和 [three.js](https://www.npmjs.com/package/three) 来绘制融合后的集合图形。
